@@ -1,6 +1,7 @@
 var baseUrl = 'http://localhost/tictactoechat/public/';
 var pusher = new Pusher('abb96bf6b157928ed5cc');
-var channel = pusher.subscribe('chat');
+var chatChannel = pusher.subscribe('chat');
+var roomChannel = pusher.subscribe('room');
 var gameControllers = angular.module('gameControllers', []);
 
 // gameControllers.controller('lobyCtrl',['$scope'
@@ -19,15 +20,25 @@ var gameControllers = angular.module('gameControllers', []);
 
 gameControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http',
 	function($scope, $routeParams, $http) {
-	$scope.chats = [];
-
-	channel.bind('message', function(data) {		
+	$http(makeRequest(baseUrl+'/room', 'GET', {})).success(function(data){
+		console.log(data);
+		$scope.rooms = data;		
+	});
+	$scope.chats = [];	
+	chatChannel.bind('message', function(data) {		
     	$scope.chats.push({
     		user : data.user,
     		message : data.message,
     	});
     	$scope.$apply();
 	});
+	roomChannel.bind('room', function(data){
+		console.log(data);
+		$scope.rooms = data;
+		$scope.$apply();
+	});
+
+
 	$scope.submit = function(){
 		if ($scope.chat != '')
 		$http(makeRequest(baseUrl, 'POST', {message : $scope.chat}));

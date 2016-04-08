@@ -32,6 +32,7 @@ class MainController extends LogicController
 
     function setRoom(){        
     	$this->setCache();
+        Pusher::trigger('room', 'room', $this->getCache());
     }    
 
     function room(){

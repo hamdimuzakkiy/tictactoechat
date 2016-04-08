@@ -12,11 +12,11 @@ tictactoeApp.config(['$routeProvider',
         templateUrl: dir+'partials/loby.html',
         controller: 'lobyCtrl'
       }).
-      when('/phones2/', {
-        templateUrl: dir+'partials/phone-detail.html',
-        controller: 'PhoneDetailCtrl'
-      }).
+      when('/create_room/', {
+        templateUrl: dir+'partials/cereate-room.html',
+        controller: 'createRoomCtrl'
+      }).      
       otherwise({
-        redirectTo: '/phones'
+        redirectTo: '/'
       });
   }]);

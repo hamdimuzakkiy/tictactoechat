@@ -22,5 +22,5 @@ Route::group(['middleware' => ['web','authenticate']], function(){
 	Route::get('/', 'MainController@index');
 	Route::post('/', 'MainController@chatLobby');		
 	Route::get('/make_room' , 'MainController@setRoom');
-
+	Route::get('/room', 'MainController@getRoom');
 });

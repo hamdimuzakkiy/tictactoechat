@@ -2,12 +2,30 @@
   <div class="col s12 m6">
     <div class="card accent-1">
       <div class="card-content black-text">
+        <span class="card-title">Room Menu</span>
+        <div ng-repeat="(creator, detail) in rooms">
+          <div class="card-panel teal">
+            <span class="white-text">
+              {{creator}}
+            </span>
+          </div>
+        </div>                
+      </div>      
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col s12 m6">
+    <div class="card accent-1">
+      <div class="card-content black-text">
         <span class="card-title">Chat Menu</span>
-        <div ng-repeat="chat in chats">{{chat.user}} : {{chat.message}}</div>        
+        <div ng-repeat="chat in chats">{{chat.user}} : {{chat.message}}</div>                
       </div>
       <div class="card-action">
         <div class="input-field">
-          <input ng-model = "chat" ng-enter="submit()" id="last_name" type="text" class="validate black-text">
+          <input autocomplete="off" ng-model = "chat" ng-enter="submit()" id="last_name" type="text" class="validate black-text">
           <label for="last_name">Chat Here</label>
         </div>
       </div>
