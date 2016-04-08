@@ -10,9 +10,17 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('/login', 'AuthController@login');
+Route::post('/login', 'AuthController@dologin');
 
-Route::get('/', function (){
+Route::get('/send', function() {
 	return view('chat');
 });
+Route::post('/send', 'ChatController@send');
 
-Route::get('/send', 'ChatController@send');
+Route::group(['middleware' => ['web','authenticate']], function(){
+	Route::get('/', 'MainController@index');
+	Route::post('/', 'MainController@chatLobby');		
+	Route::get('/make_room' , 'MainController@setRoom');
+
+});
