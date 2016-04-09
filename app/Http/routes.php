@@ -21,6 +21,13 @@ Route::post('/send', 'ChatController@send');
 Route::group(['middleware' => ['web','authenticate']], function(){
 	Route::get('/', 'MainController@index');
 	Route::post('/', 'MainController@chatLobby');		
+	Route::get('/game', 'MainController@getGame');
+	Route::post('/join_room', 'MainController@joinRoom');
+
+
 	Route::get('/make_room' , 'MainController@setRoom');
-	Route::get('/room', 'MainController@getRoom');
+	Route::get('/room', 'MainController@getRooms');	
+	Route::get('/clear_room' , 'MainController@clearRoom');
+	Route::get('/delete_room', 'MainController@deleteRoom');
+	Route::get('/test', 'MainController@resets');
 });

@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "^5.2",
 		"laravelcollective/html": "5.2.*",
-        "vinkla/pusher": "^2.2"
+        "vinkla/pusher": "^2.2",
+		"aws/aws-sdk-php": "2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

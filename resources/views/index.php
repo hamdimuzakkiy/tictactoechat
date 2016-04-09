@@ -24,9 +24,9 @@
 			<div class="nav-wrapper">
 			  <a href="#" class="brand-logo center">Tic Tac Toe</a>
 			  <ul id="nav-mobile" class="right hide-on-med-and-down">
-			    <li><a href="sass.html">Loby</a></li>
+			    <li><a ng-href="#/">Loby</a></li>
 			    <li><a ng-href="#/create_room">Create Room</a></li>
-			    <li><a href="collapsible.html">Join Room</a></li>
+			    <li><a ng-href="#/game">Game</a></li>
 			  </ul>
 			</div>
 		</nav>

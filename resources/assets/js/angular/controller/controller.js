@@ -4,27 +4,12 @@ var chatChannel = pusher.subscribe('chat');
 var roomChannel = pusher.subscribe('room');
 var gameControllers = angular.module('gameControllers', []);
 
-// gameControllers.controller('lobyCtrl',['$scope'
-// 	function ($scope, $http){	
-// 		$scope.name = 'hamdi';
-// }]);
-
-// phonecatControllers.controller('PhoneListCtrl', ['$scope', '$http',
-//   function ($scope, $http) {
-//     $http.get('phones/phones.json').success(function(data) {
-//       $scope.phones = data;
-//     });
-
-//     $scope.orderProp = 'age';
-//   }]);
-
 gameControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http',
 	function($scope, $routeParams, $http) {
-	$http(makeRequest(baseUrl+'/room', 'GET', {})).success(function(data){
-		console.log(data);
+	$http(makeRequest(baseUrl+'/room', 'GET', {})).success(function(data){		
 		$scope.rooms = data;		
 	});
-	$scope.chats = [];	
+	$scope.chats = [];
 	chatChannel.bind('message', function(data) {		
     	$scope.chats.push({
     		user : data.user,
@@ -32,8 +17,7 @@ gameControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http',
     	});
     	$scope.$apply();
 	});
-	roomChannel.bind('room', function(data){
-		console.log(data);
+	roomChannel.bind('room', function(data){		
 		$scope.rooms = data;
 		$scope.$apply();
 	});
@@ -44,6 +28,20 @@ gameControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http',
 		$http(makeRequest(baseUrl, 'POST', {message : $scope.chat}));
 		$scope.chat = '';
 	}
+
+	$scope.chooseRoom = function (id){
+		$http(makeRequest(baseUrl+'join_room', 'POST', {id : id})).success(function(data){
+			console.log(data);
+		});
+	}
+}]);
+
+
+gameControllers.controller('gameCtrl', ['$scope', '$routeParams', '$http',
+	function($scope, $routeParams, $http){
+		$http(makeRequest(baseUrl+'/game', 'GET', {})).success(function(data){
+			console.log(data.length);
+		});
 }]);
 
 function makeRequest(url, method ,data){

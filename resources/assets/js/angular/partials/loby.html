@@ -3,19 +3,17 @@
     <div class="card accent-1">
       <div class="card-content black-text">
         <span class="card-title">Room Menu</span>
-        <div ng-repeat="(creator, detail) in rooms">
-          <div class="card-panel teal">
+        <div ng-repeat="(creator, detail) in rooms">          
+          <div class="card-panel teal" ng-click="chooseRoom(creator)">          
             <span class="white-text">
-              {{creator}}
+              {{creator}}              
             </span>
-          </div>
+          </div>          
         </div>                
       </div>      
     </div>
   </div>
 </div>
-
-
 <div class="row">
   <div class="col s12 m6">
     <div class="card accent-1">

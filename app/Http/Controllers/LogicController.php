@@ -20,24 +20,48 @@ class LogicController extends Controller
     		$list[ Auth::user()->email];
     		return false;
     	} catch (\Exception $e) {    		
-    		$list[Auth::user()->email] = array('creator'=>Auth::user()->email,'password'=>'','opponent'=>'','spectators' => []);
-    		Cache::forever('room',$list);    		
+    		$list[Auth::user()->email] = array('creator'=>Auth::user()->email,'password'=>'','opponent'=>'','spectators' => [], 'movement' => []);
+            Cache::forever(Auth::user()->email,array('gameId'=>Auth::user()->email, 'role'=>'own'));
+    		Cache::forever('room',$list);
     	}    	
     	return true;
     }
 
-    protected function getCache(){    	    	
+    protected function getCaches(){    	    	
     	return Cache::get('room');
+    }
+
+    protected function getCache(){
+        return Cache::get(Auth::user()->email);
     }
 
     protected function deleteCache(){
     	try {
     		$list = Cache::get('room');
     		unset($list[Auth::user()->email]);
-    		Cache::put('room',$list);
+            Cache::forget(Auth::user()->email);
+    		Cache::forever('room',$list);            
     		return;
     	} catch (\Exception $e) {
     		return;
     	}
+    }
+
+    protected function clearCache(){
+        return Cache::flush();
+    }
+
+    protected function getGameCaches(){
+        $list = $this->getCaches();               
+        return $list[$this->getCache()['gameId']];
+    }
+
+    protected function joinCache($id){        
+        try {
+            Cache::get();
+        } catch (\Exception $e) {
+            
+        }
+
     }
 }

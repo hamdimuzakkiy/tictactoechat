@@ -16,6 +16,10 @@ tictactoeApp.config(['$routeProvider',
         templateUrl: dir+'partials/cereate-room.html',
         controller: 'createRoomCtrl'
       }).      
+      when('/game/', {
+        templateUrl : dir+'partials/game.html',
+        controller: 'gameCtrl'
+      }).
       otherwise({
         redirectTo: '/'
       });
