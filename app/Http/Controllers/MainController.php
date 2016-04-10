@@ -29,9 +29,7 @@ class MainController extends LogicController
     }
 
     function joinRoom(Request $request){        
-        if ($this->joinCache($request->id))            
-            return 0;
-        return 1;
+        return $this->joinCache($request->id);
     }
 
     function getGame(){
@@ -46,8 +44,8 @@ class MainController extends LogicController
     	return $this->getCaches();
     }
 
-    function setRoom(){        
-    	$this->setCache();
+    function setRoom(Request $request){
+    	$this->setCache($request->name, $request->password);
         Pusher::trigger('room', 'room', $this->getCaches());
     }    
 

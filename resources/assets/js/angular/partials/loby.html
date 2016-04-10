@@ -1,15 +1,19 @@
+
+
 <div class="row">
   <div class="col s12 m6">
     <div class="card accent-1">
       <div class="card-content black-text">
-        <span class="card-title">Room Menu</span>
-        <div ng-repeat="(creator, detail) in rooms">          
-          <div class="card-panel teal" ng-click="chooseRoom(creator)">          
-            <span class="white-text">
-              {{creator}}              
-            </span>
-          </div>          
-        </div>                
+        <span class="card-title">Room Menu</span>        
+          <div> <ng-md-icon class = "btn" icon="exit_to_app" style="fill:white" size="30" href='#demoModal' modal></ng-md-icon> 
+            <div ng-repeat="(creator, detail) in rooms">          
+              <div class="card-panel teal" ng-click="chooseRoom(creator)">          
+                <span class="white-text">
+                  {{creator}} {{detail}}         
+                </span>
+              </div>          
+            </div>                
+          </div>
       </div>      
     </div>
   </div>
@@ -29,4 +33,22 @@
       </div>
     </div>
   </div>
+</div>
+<div id="demoModal" class="modal">
+    <div class="modal-content">
+        <h5>Create New Room</h5>
+        <div input-field>
+          <input type="text" ng-model="name" length="150">          
+          <label>Room Name</label>
+        </div>
+        <div input-field>
+          <input type="password" ng-model="password" length="150">
+          <label>Password</label>
+        </div>        
+    </div>
+    <div class="modal-footer">
+        <!-- <a tooltipped class="btn col s4 offset-s4 l2 offset-l1" data-position="bottom" data-delay="50" data-tooltip="I am tooltip"> Bottom</a> -->
+        <a ng-click ='makeRoom()' class=" modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>        
+    </div>
 </div>

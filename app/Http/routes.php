@@ -23,7 +23,7 @@ Route::group(['middleware' => ['web','authenticate']], function(){
 	Route::post('/', 'MainController@chatLobby');		
 	Route::get('/game', 'MainController@getGame');
 	Route::post('/join_room', 'MainController@joinRoom');
-
+	Route::post('/make_room' , 'MainController@setRoom');
 
 	Route::get('/make_room' , 'MainController@setRoom');
 	Route::get('/room', 'MainController@getRooms');	

@@ -20,13 +20,18 @@ gameControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http',
 	roomChannel.bind('room', function(data){		
 		$scope.rooms = data;
 		$scope.$apply();
-	});
-
+	});	
 
 	$scope.submit = function(){
 		if ($scope.chat != '')
 		$http(makeRequest(baseUrl, 'POST', {message : $scope.chat}));
 		$scope.chat = '';
+	}
+
+	$scope.makeRoom = function(){
+		$http(makeRequest(baseUrl+'make_room', 'POST', {name:$scope.name, $password:$scope.password})).success(function(data){
+			console.log(data);
+		});
 	}
 
 	$scope.chooseRoom = function (id){

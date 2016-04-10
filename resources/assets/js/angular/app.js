@@ -2,7 +2,9 @@ var dir = '../resources/assets/js/angular/'
 
 var tictactoeApp = angular.module('tictactoeApp', [
   'ngRoute',
-  'gameControllers'
+  'ui.materialize',
+  'ngMdIcons',  
+  'gameControllers',  
 ]);
 
 tictactoeApp.config(['$routeProvider',
@@ -13,7 +15,7 @@ tictactoeApp.config(['$routeProvider',
         controller: 'lobyCtrl'
       }).
       when('/create_room/', {
-        templateUrl: dir+'partials/cereate-room.html',
+        templateUrl: dir+'partials/modal.html',
         controller: 'createRoomCtrl'
       }).      
       when('/game/', {

@@ -3,6 +3,9 @@
 	<head>	
 	  	<meta charset="utf-8">
 	  	<title>My HTML File</title>	
+	  	<!-- jquery -->
+		<?php print Html::script('../resources/assets/js/angular/bower_components/jquery/dist/jquery.min.js') ?>
+	  	
 	  	<!-- pusher -->
 		<?php print Html::script('../resources/assets/js/pusher.min.js') ?>		
 
@@ -10,12 +13,13 @@
 		<?php print Html::script('../resources/assets/js/angular/bower_components/angular/angular.js') ?>
 		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-route/angular-route.js') ?>
 		<?php print Html::script('../resources/assets/js/angular/app.js') ?>
-		<?php print Html::script('../resources/assets/js/angular/controller/controller.js') ?>
-
-		<!-- jquery -->
-		<?php print Html::script('../resources/assets/js/angular/bower_components/jquery/dist/jquery.min.js') ?>
+		<?php print Html::script('../resources/assets/js/angular/controller/controller.js') ?>				
 
 		<!-- materialize -->
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-materialize/src/angular-materialize.js') ?>		
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-material-icons/angular-material-icons.css') ?>		
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-material-icons/angular-material-icons.min.js') ?>				
+
 		<?php print Html::style('../resources/assets/css/materialize/css/materialize.min.css') ?>
 		<?php print Html::script('../resources/assets/css/materialize/js/materialize.min.js') ?>		
 	</head>
@@ -30,6 +34,9 @@
 			  </ul>
 			</div>
 		</nav>
-		<div ng-view></div>		
+		<div ng-view></div>
 	</body>
 </html>
+
+
+
