@@ -28,8 +28,10 @@ class MainController extends LogicController
     	Pusher::trigger(['chat'], 'message', ['message' => $request->message, 'user'=>Auth::user()->email]);
     }
 
-    function joinRoom(Request $request){        
-        return $this->joinCache($request->id);
+    function joinRoom(Request $request){
+        $status =  $this->joinCache($request->id, $request->password);
+        Pusher::trigger('room', 'room', $this->getCaches());
+        return $status;
     }
 
     function getGame(){
@@ -44,9 +46,13 @@ class MainController extends LogicController
     	return $this->getCaches();
     }
 
-    function setRoom(Request $request){
-    	$this->setCache($request->name, $request->password);
-        Pusher::trigger('room', 'room', $this->getCaches());
+    function setRoom(Request $request){        
+    	if ($this->setCache($request->password)){
+            Pusher::trigger('room', 'room', $this->getCaches());
+            return 1;
+        }        
+        return 0;
+
     }    
 
     function deleteRoom(){
@@ -61,5 +67,9 @@ class MainController extends LogicController
     function resets(){
         $job = (new CounterGame())->delay(60 * 5);
         $this->dispatch($job);
+    }
+
+    function profile(){
+        return Auth::user();
     }
 }

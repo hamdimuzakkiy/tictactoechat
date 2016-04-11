@@ -1,54 +1,58 @@
-
-
-<div class="row">
-  <div class="col s12 m6">
-    <div class="card accent-1">
-      <div class="card-content black-text">
-        <span class="card-title">Room Menu</span>        
-          <div> <ng-md-icon class = "btn" icon="exit_to_app" style="fill:white" size="30" href='#demoModal' modal></ng-md-icon> 
-            <div ng-repeat="(creator, detail) in rooms">          
-              <div class="card-panel teal" ng-click="chooseRoom(creator)">          
-                <span class="white-text">
-                  {{creator}} {{detail}}         
-                </span>
-              </div>          
-            </div>                
-          </div>
-      </div>      
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col s12 m6">
-    <div class="card accent-1">
-      <div class="card-content black-text">
-        <span class="card-title">Chat Menu</span>
-        <div ng-repeat="chat in chats">{{chat.user}} : {{chat.message}}</div>                
-      </div>
-      <div class="card-action">
-        <div class="input-field">
-          <input autocomplete="off" ng-model = "chat" ng-enter="submit()" id="last_name" type="text" class="validate black-text">
-          <label for="last_name">Chat Here</label>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="demoModal" class="modal">
-    <div class="modal-content">
-        <h5>Create New Room</h5>
-        <div input-field>
-          <input type="text" ng-model="name" length="150">          
-          <label>Room Name</label>
-        </div>
-        <div input-field>
-          <input type="password" ng-model="password" length="150">
-          <label>Password</label>
-        </div>        
-    </div>
-    <div class="modal-footer">
-        <!-- <a tooltipped class="btn col s4 offset-s4 l2 offset-l1" data-position="bottom" data-delay="50" data-tooltip="I am tooltip"> Bottom</a> -->
-        <a ng-click ='makeRoom()' class=" modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>        
-    </div>
+<div layout="row">
+	<div flex>
+		<md-toolbar md-scroll-shrink class="md-accent">
+			<div class="md-toolbar-tools yellow">List Room</div>
+		</md-toolbar>
+			<md-card>
+		    <md-card-title class="room">
+		      <md-card-title-text>
+		      	<span class="md-subhead blue chat-content game-room" ng-repeat="(creator, detail) in rooms" ng-click="chooseRoom($event,creator)">
+		      		<table>
+		      			<tr>
+		      				<td>Creator</td>
+		      				<td> : <b>{{creator}}</b></td>
+		      			</tr>
+		      			<tr>
+		      				<td>Opponent</td>
+		      				<td>: <b>{{detail.opponent}}</b></td>
+		      			</tr>
+		      			<tr>
+		      				<td>Spectator</td>
+		      				<td>: 
+		      					<span ng-repeat="spectator in detail.spectators">
+		      						<b> {{spectator}}</b>, 
+		      					</span>
+		      				</td>
+		      			</tr>
+		      		</table>		      					      			
+		      	</span>		        
+		      </md-card-title-text>                    
+		    </md-card-title>
+		    <md-card-actions layout="row"  layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+				<md-button class="md-fab" aria-label="new room"  ng-click='makeRoom($event)'>
+		            <md-icon md-svg-src="../resources/assets/js/angular/icon/ic_add_white_48px.svg"></md-icon>
+		        </md-button>
+		    </md-card-actions>
+		  </md-card>
+	</div>
+	<div flex>
+	<!-- chat -->
+	<md-toolbar md-scroll-shrink class="md-accent">
+		<div class="md-toolbar-tools">Chat</div>
+	</md-toolbar>
+	<md-card>
+	    <md-card-title class="chat">
+	      <md-card-title-text>          	
+	      	<span class="md-subhead blue chat-content" ng-repeat="chat in chats"><b>{{chat.user}}</b><br>{{chat.message}}</span>
+	        <span id = 'bottom'></span>
+	      </md-card-title-text>                    
+	    </md-card-title>
+	    <md-card-actions layout="row" layout-align="end center">          
+	      	<md-input-container flex>
+			  <label>Type Here</label>
+			  <input type="text" ng-model = "chat" ng-enter="submit()"/>
+			</md-input-container>
+	    </md-card-actions>
+	  </md-card>
+	</div>    
 </div>

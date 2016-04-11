@@ -13,27 +13,33 @@
 		<?php print Html::script('../resources/assets/js/angular/bower_components/angular/angular.js') ?>
 		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-route/angular-route.js') ?>
 		<?php print Html::script('../resources/assets/js/angular/app.js') ?>
-		<?php print Html::script('../resources/assets/js/angular/controller/controller.js') ?>				
+		<?php print Html::script('../resources/assets/js/angular/controller/lobyController.js') ?>				
+
+		<!-- material design -->
+		<?php print Html::style('../resources/assets/js/angular/bower_components/angular-material/angular-material.min.css') ?>		
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-material/angular-material.min.js') ?>		
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-material/angular-material-mocks.js') ?>		
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-animate/angular-animate.min.js') ?>		
+		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-aria/angular-aria.min.js') ?>		
 
 		<!-- materialize -->
-		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-materialize/src/angular-materialize.js') ?>		
-		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-material-icons/angular-material-icons.css') ?>		
-		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-material-icons/angular-material-icons.min.js') ?>				
-
-		<?php print Html::style('../resources/assets/css/materialize/css/materialize.min.css') ?>
-		<?php print Html::script('../resources/assets/css/materialize/js/materialize.min.js') ?>		
+		<?php print Html::style('../resources/assets/css/own.css') ?>				
 	</head>
-	<body>
-		<nav>
-			<div class="nav-wrapper">
-			  <a href="#" class="brand-logo center">Tic Tac Toe</a>
-			  <ul id="nav-mobile" class="right hide-on-med-and-down">
-			    <li><a ng-href="#/">Loby</a></li>
-			    <li><a ng-href="#/create_room">Create Room</a></li>
-			    <li><a ng-href="#/game">Game</a></li>
-			  </ul>
+	<body>		
+		<md-toolbar>
+			<div class="md-toolbar-tools">				
+				<h2>
+				  <span>Tic Tac Toe</span><span id="emails"> - ( {{email}} )</span>
+				</h2>
+				<span flex></span>
+				<md-button  aria-label="Loby" ng-href = '#/'>
+				  Loby
+				</md-button>								
+				<md-button  aria-label="Game" ng-href = '#/game'>
+				  Game
+				</md-button>				
 			</div>
-		</nav>
+		</md-toolbar>
 		<div ng-view></div>
 	</body>
 </html>

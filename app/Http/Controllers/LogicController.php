@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Cache;
 use Auth;
+use Hash;
 
 class LogicController extends Controller
 {
@@ -16,19 +17,21 @@ class LogicController extends Controller
         return Auth::user();
     }
 
-    private function createNewRoom($list, $roomName, $password){
-        $roomName = $roomName == NULL ? '' : $roomName;
-        $password = $password == NULL ? '' : $password;
+    private function createNewRoom($list, $password){
+        if ($password!='')
+            $isPassword = 1;
+        else
+            $isPassword = 0;
         $list[$this->account()->email] = array(
-                                            'creator'=>$this->account()->email
-                                            ,'name' => $roomName
-                                            ,'password'=>$password
-                                            ,'opponent'=>''
-                                            ,'spectators' => []
-                                            , 'movement' => []);
+        'creator'=>$this->account()->email                                            
+        ,'password'=> bcrypt($password)
+        , 'isPassword' => $isPassword
+        ,'opponent'=>''
+        ,'spectators' => []
+        , 'movement' => []);
         Cache::forever($this->account()->email,array('gameId'=>$this->account()->email, 'role'=>'own'));
         Cache::forever('room',$list);
-        return ;
+        return 1;
     }
 
     private function logicGame($id){
@@ -55,17 +58,18 @@ class LogicController extends Controller
     }
 
     // set cache for new room
-    protected function setCache($roomName = '', $password = ''){
+    protected function setCache($password = ''){        
     	if (!Cache::has('room'))
-    		Cache::forever('room',array());
-    	$list = Cache::get('room');    	
-    	try {    		
+    		Cache::forever('room',array());        
+    	$list = Cache::get('room');        
+    	try {                        
     		$list[$this->account()->email];
-    		return false;
-    	} catch (\Exception $e) {    		
-    		$this->createNewRoom($list, $roomName, $password);
-    	}    	
-    	return true;
+    		return 0;
+    	} catch (\Exception $e) {
+            if (Cache::has($this->account()->email))
+                return 0;
+    		return $this->createNewRoom($list,$password);
+    	}    	    	
     }
 
     // get all room 
@@ -103,12 +107,14 @@ class LogicController extends Controller
     }
 
     // join to game, decide whether the user have a game or no, and assign to opponent or spectator    
-    protected function joinCache($id){        
+    protected function joinCache($id, $password){        
         $role = $this->logicGame($id);
         if ($role == '0')
             return 0;        
         $list = $this->getCaches();
         $room = $list[$id];        
+        if (!Hash::check($password, $room['password']))
+            return 0;
         if ($role == 'opponent'){
             $room['opponent'] = $this->account()->email;
             Cache::forever($this->account()->email, array('gameId'=>$id, 'role'=>'opponent'));

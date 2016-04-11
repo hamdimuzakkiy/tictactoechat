@@ -19,6 +19,7 @@ Route::get('/send', function() {
 Route::post('/send', 'ChatController@send');
 
 Route::group(['middleware' => ['web','authenticate']], function(){
+	Route::get('/profile', 'MainController@profile');
 	Route::get('/', 'MainController@index');
 	Route::post('/', 'MainController@chatLobby');		
 	Route::get('/game', 'MainController@getGame');

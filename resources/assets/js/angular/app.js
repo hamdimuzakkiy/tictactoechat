@@ -1,11 +1,18 @@
 var dir = '../resources/assets/js/angular/'
 
 var tictactoeApp = angular.module('tictactoeApp', [
-  'ngRoute',
-  'ui.materialize',
-  'ngMdIcons',  
-  'gameControllers',  
-]);
+  'ngRoute',    
+  'ngMaterial',
+  'lobyControllers',  
+])
+.config(function ($mdThemingProvider,$mdIconProvider) {
+    $mdThemingProvider.theme('default')
+    .primaryPalette('deep-purple',{
+        'default' : '400',
+        'hue-1' : '100',
+    })
+    .accentPalette('pink');    
+})
 
 tictactoeApp.config(['$routeProvider',
   function($routeProvider) {
