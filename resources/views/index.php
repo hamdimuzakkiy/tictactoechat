@@ -14,6 +14,7 @@
 		<?php print Html::script('../resources/assets/js/angular/bower_components/angular-route/angular-route.js') ?>
 		<?php print Html::script('../resources/assets/js/angular/app.js') ?>
 		<?php print Html::script('../resources/assets/js/angular/controller/lobyController.js') ?>				
+		<?php print Html::script('../resources/assets/js/angular/controller/gameController.js') ?>				
 
 		<!-- material design -->
 		<?php print Html::style('../resources/assets/js/angular/bower_components/angular-material/angular-material.min.css') ?>		

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Cache;
 use Auth;
 use Hash;
+use Carbon;
 
 class LogicController extends Controller
 {
@@ -17,7 +18,7 @@ class LogicController extends Controller
         return Auth::user();
     }
 
-    private function createNewRoom($list, $password){
+    private function createNewRoom($list, $password){        
         if ($password!='')
             $isPassword = 1;
         else
@@ -28,7 +29,8 @@ class LogicController extends Controller
         , 'isPassword' => $isPassword
         ,'opponent'=>''
         ,'spectators' => []
-        , 'movement' => []);
+        ,'subscribe' => (string)$this->account()->email.date_format(Carbon\Carbon::now(),'Y_m_d_H_i_s')
+        , 'movements' => []);
         Cache::forever($this->account()->email,array('gameId'=>$this->account()->email, 'role'=>'own'));
         Cache::forever('room',$list);
         return 1;
@@ -126,5 +128,36 @@ class LogicController extends Controller
         $list[$id] = $room;                
         Cache::forever('room', $list);                
         return 1;
+    }
+
+    private function checkMovements($movements, $tile){
+        try {            
+            $movements[$tile];
+            return 0;
+        } catch (\Exception $e) {
+            return 1;
+        }
+    }
+
+    private function checkTurn($room){        
+        if (count($room['movements'])%2 == 0)
+            return $room['creator'];
+        return $room['opponent'];
+    }
+
+    protected function updateMovements($tile){        
+        $list = $this->getCaches();
+        $room = $list[$this->getCache()['gameId']];
+        $movements = $room['movements'];        
+        if ($this->checkTurn($room) == $this->account()->email){
+            if ($this->checkMovements($movements, $tile)){                
+                $movements[$tile] = $this->account()->email;
+                $room['movements'] = $movements;
+                $list[$this->getCache()['gameId']] = $room;
+                Cache::forever('room', $list);
+                return 1;
+            }
+        }
+        return 0;
     }
 }

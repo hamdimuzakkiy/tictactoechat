@@ -13,6 +13,7 @@ use Vinkla\Pusher\Facades\Pusher;
 use Auth;
 use Cache;
 
+
 class MainController extends LogicController
 {
 
@@ -31,6 +32,7 @@ class MainController extends LogicController
     function joinRoom(Request $request){
         $status =  $this->joinCache($request->id, $request->password);
         Pusher::trigger('room', 'room', $this->getCaches());
+        $this->broadcastGame();
         return $status;
     }
 
@@ -52,7 +54,6 @@ class MainController extends LogicController
             return 1;
         }        
         return 0;
-
     }    
 
     function deleteRoom(){
@@ -71,5 +72,20 @@ class MainController extends LogicController
 
     function profile(){
         return Auth::user();
+    }
+
+    function turn(Request $request){
+        if ($this->updateMovements($request->tile))
+            $this->broadcastGame();        
+    }
+
+    function broadcastGame(){
+        Pusher::trigger($this->getCaches()[$this->getCache()['gameId']]['subscribe'],'message'
+            , $this->getCaches()[$this->getCache()['gameId']]); 
+    }
+
+    function test(){
+        Pusher::trigger($this->getCaches()[$this->getCache()['gameId']]['subscribe'],'message'
+            , $this->getCaches()[$this->getCache()['gameId']]);        
     }
 }

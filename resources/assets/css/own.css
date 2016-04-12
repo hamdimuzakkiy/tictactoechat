@@ -47,3 +47,19 @@
 .game-room{
   cursor: pointer;
 }
+
+.board{
+  height: 150px;  
+  border: white 2px solid;
+  cursor: pointer;
+  text-align: center;  
+}
+
+.per3{  
+  width: 50%;
+  margin: auto;  
+}
+
+.gameTurn{
+  text-align: center;
+}

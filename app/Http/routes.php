@@ -13,11 +13,6 @@
 Route::get('/login', 'AuthController@login');
 Route::post('/login', 'AuthController@dologin');
 
-Route::get('/send', function() {
-	return view('chat');
-});
-Route::post('/send', 'ChatController@send');
-
 Route::group(['middleware' => ['web','authenticate']], function(){
 	Route::get('/profile', 'MainController@profile');
 	Route::get('/', 'MainController@index');
@@ -25,10 +20,12 @@ Route::group(['middleware' => ['web','authenticate']], function(){
 	Route::get('/game', 'MainController@getGame');
 	Route::post('/join_room', 'MainController@joinRoom');
 	Route::post('/make_room' , 'MainController@setRoom');
+	Route::post('/turn', 'MainController@turn');
 
+	Route::get('/test', 'MainController@test');		
 	Route::get('/make_room' , 'MainController@setRoom');
 	Route::get('/room', 'MainController@getRooms');	
 	Route::get('/clear_room' , 'MainController@clearRoom');
 	Route::get('/delete_room', 'MainController@deleteRoom');
-	Route::get('/test', 'MainController@resets');
+	
 });

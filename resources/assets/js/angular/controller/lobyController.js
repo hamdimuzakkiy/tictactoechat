@@ -5,8 +5,8 @@ var chatChannel = pusher.subscribe('chat');
 var roomChannel = pusher.subscribe('room');
 var lobyControllers = angular.module('lobyControllers', []);
 
-lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$location', '$anchorScroll', '$mdDialog', '$rootScope',
-	function($scope, $routeParams, $http, $location, $anchorScroll, $mdDialog ,$rootScope) {
+lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$location', '$anchorScroll', '$mdDialog', '$rootScope', '$window',		
+	function($scope, $routeParams, $http, $location, $anchorScroll, $mdDialog ,$rootScope, $window) {						
 	$http(makeRequest(baseUrl+'profile', 'GET', {})). success(function(data){
 		$rootScope.email = data.email;
 	})
@@ -19,9 +19,9 @@ lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$loc
     		user : data.user,
     		message : data.message,
     	});
-    	$scope.$apply();    	
+    	$scope.$apply();
     	$location.hash('bottom');      	
-      	$anchorScroll();
+      	$anchorScroll();      	
 	});
 	roomChannel.bind('room', function(data){		
 		$scope.rooms = data;		
@@ -42,7 +42,7 @@ lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$loc
 		$scope.chat = '';
 	}
 
-	$scope.chooseRoom = function (ev,id){
+	$scope.chooseRoom = function (ev,id){		
 		var content = {
 			placeholder 	: 'Password',
 			ariaLabel 		: 'Password',
@@ -51,36 +51,22 @@ lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$loc
 			ok 				: 'Submit',
 			cancel 			: 'Cancle',
 		}
-		if ($scope.rooms[id]['isPassword'] == 1){
-
+		if ($scope.rooms[id]['isPassword'] == 1){			
 			dialogPrompt($mdDialog, ev, content, function (password) {				
-				$http(makeRequest(baseUrl+'join_room', 'POST', {id : id, password:password})).success(function(status){					
-					if (status == true)
-						var success = {
-							title 		: 'Success',
-							textContent : 'You Will Redirect To The Game ... ',
-							ok 			: 'Ok',
-					}
-					else 
-						var failed = {
-							title 		: 'Failed',
-							textContent : 'Wrong Password/ Room Full / You Have A Game',
-							ok 			: 'Ok'
-						}					
-					if (status == true)
-						dialogConfirm($mdDialog, ev, success, function () {
-							console.log('redirect');
-						});
-					else
-						dialogConfirm($mdDialog, ev, failed, function () {
-							console.log('failed');
-						});
+				$http(makeRequest(baseUrl+'join_room', 'POST', {id : id, password:password})).success(function(status){										
+					joinStatus(status, $mdDialog, ev, function(status){
+						if (status)
+						$window.location.href = '#/game';
+					});						
 				});					
 			})
 		}
 		else{			
-			$http(makeRequest(baseUrl+'join_room', 'POST', {id : id, password:''})).success(function(data){
-				
+			$http(makeRequest(baseUrl+'join_room', 'POST', {id : id, password:''})).success(function(status){
+					joinStatus(status, $mdDialog, ev, function(status){
+						if (status)
+						$window.location.href = '#/game';
+					});
 			});
 		}					
 	}
@@ -93,7 +79,7 @@ lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$loc
 			textContent 	: 'Using Password If You Want ... ',			
 			ok 				: 'Submit',
 			cancel 			: 'Cancle',
-		}		
+		}				
 		dialogPrompt($mdDialog, ev, content, function(password){
 			$http(makeRequest(baseUrl+'make_room', 'POST', {password:password })).success(function(data){
 				if (data == 0){
@@ -111,20 +97,15 @@ lobyControllers.controller('lobyCtrl', ['$scope', '$routeParams', '$http', '$loc
 
 					}
 				}
-				dialogConfirm($mdDialog, ev, status, function () {					
+				dialogConfirm($mdDialog, ev, status, function () {
+					if (data == 1)
+						$window.location.href = '#/game';
 				});
 			});
 		});
 	}	
 }]);
 
-
-lobyControllers.controller('gameCtrl', ['$scope', '$routeParams', '$http',
-	function($scope, $routeParams, $http){
-		$http(makeRequest(baseUrl+'game', 'GET', {})).success(function(data){
-			console.log(data.length);
-		});
-}]);
 
 function makeRequest(url, method ,data){
 	return {
@@ -161,6 +142,33 @@ function dialogPrompt($mdDialog, ev, content, callback){
   	$mdDialog.show(dialogContent).then(function (password) {
   		callback(password);
   	})	      		      	
+}
+
+function joinStatus(status, $mdDialog, ev, callback){
+	console.log(status);
+	if (status == true)
+		var success = {
+			title 		: 'Success',
+			textContent : 'You Will Redirect To The Game ... ',
+			ok 			: 'Ok',
+	}
+	else 
+		var failed = {
+			title 		: 'Failed',
+			textContent : 'Wrong Password/ Room Full / You Have A Game',
+			ok 			: 'Ok'
+	}					
+	if (status == true){
+		dialogConfirm($mdDialog, ev, success, function () {						
+			callback(1);
+		});
+	}
+		
+	else{						
+		dialogConfirm($mdDialog, ev, failed, function () {							
+			callback(0);			
+		});
+	}	
 }
 
 lobyControllers.directive('ngEnter', function(){
