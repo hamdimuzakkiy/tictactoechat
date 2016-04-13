@@ -38,7 +38,10 @@
 				</md-button>								
 				<md-button  aria-label="Game" ng-href = '#/game'>
 				  Game
-				</md-button>				
+				</md-button>
+				<md-button  aria-label="Game" ng-href = 'logout'>
+				  Log Out
+				</md-button>
 			</div>
 		</md-toolbar>
 		<div ng-view></div>

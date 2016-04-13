@@ -84,12 +84,29 @@ class LogicController extends Controller
         return Cache::get($this->account()->email);
     }
 
+    //unset user
+    protected function deleteUserCache(){
+        try {
+            $list = $this->getCaches();
+            $room = $list[$this->getCache()['gameId']];
+            $this->deleteCache();            
+            $creator = $room['creator'];
+            $opponent = $room['opponent'];
+            $spectators = $room['spectators'];
+            Cache::forget($creator);
+            Cache::forget($opponent);
+            foreach ($spectators as $spectator) {
+                Cache::forget($spectator);
+            }            
+        } catch (\Exception $e) {           
+        }
+    }
+
     // unset from room
     protected function deleteCache(){
     	try {
-    		$list = Cache::get('room');
-    		unset($list[$this->account()->email]);
-            Cache::forget($this->account()->email);
+    		$list = Cache::get('room');            
+    		unset($list[$this->account()->email]);            
     		Cache::forever('room',$list);            
     		return;
     	} catch (\Exception $e) {
@@ -160,4 +177,87 @@ class LogicController extends Controller
         }
         return 0;
     }
+
+    private function checkWho($movements, $tile){
+        try {
+            $movements[$tile];
+            return 1;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    private function checkEquality($movements, $tile, $who){        
+        try {
+            if ($movements[$tile] == $who)
+                return 1;
+            return 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    protected function checkGame(){
+        $room = $this->getGameCaches();
+        $movements = $room['movements'];
+        $col = ['A','B','C'];
+        $row = ['1','2','3'];        
+        for ($i=0;$i<sizeof($col);$i++){
+            if (!$this->checkWho($movements, $col[$i].'1'))
+                continue;
+            $who = $movements[$col[$i].'1'];
+            $flag = 1;
+            for ($j=1;$j<sizeof($row);$j++){
+                if (!$this->checkEquality($movements, $col[$i].$row[$j], $who)){                    
+                    $flag = 0;
+                    break;       
+                }
+            }    
+            if ($flag)
+            return $who;
+        }
+
+        for ($i=0;$i<sizeof($col);$i++){
+            if (!$this->checkWho($movements,'A'.$row[$i]))
+                continue;
+            $who = $movements['A'.$row[$i]];
+            $flag = 1;
+            for ($j=1;$j<sizeof($row);$j++){
+                if (!$this->checkEquality($movements, $col[$j].$row[$i], $who)){                    
+                    $flag = 0;
+                    break;       
+                }
+            }    
+            if ($flag)
+            return $who;
+        }
+
+        $flag = 1;
+
+        if ($this->checkWho($movements, $col[0].$row[0])){
+            $who = $movements[$col[0].$row[0]];
+            for ($i=1;$i<sizeof($col);$i++){            
+                if (!$this->checkEquality($movements, $col[$i].$row[$i], $who)){
+                    $flag = 0;
+                    break;
+                }
+            }
+            if ($flag)
+                return $who;
+        }      
+        $flag = 1;  
+        if ($this->checkWho($movements, $col[0].$row[2])){
+            $who = $movements[$col[0].$row[2]];
+            for ($i=1;$i<sizeof($col);$i++){            
+                if (!$this->checkEquality($movements, $col[$i].$row[2-$i], $who)){
+                    $flag = 0;
+                    break;
+                }
+            }
+            if ($flag)
+                return $who;
+        }
+        return '';
+    }
+
 }

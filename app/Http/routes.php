@@ -21,6 +21,8 @@ Route::group(['middleware' => ['web','authenticate']], function(){
 	Route::post('/join_room', 'MainController@joinRoom');
 	Route::post('/make_room' , 'MainController@setRoom');
 	Route::post('/turn', 'MainController@turn');
+	Route::get('logout', 'AuthController@logout');
+
 
 	Route::get('/test', 'MainController@test');		
 	Route::get('/make_room' , 'MainController@setRoom');

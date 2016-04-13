@@ -5,7 +5,8 @@
     <div class='md-padding' layout="row" flex layout-align="center center" >
        <div layout="row" flex ng-repeat='(index,detail) in movement'>   
           <div class="parent teal board" layout="column" flex ng-click="choosing(index)">
-            {{detail}}
+            <!-- {{detail}} -->
+            <md-icon md-svg-src="../resources/assets/js/angular/icon/{{detail}}" aria-label="android "></md-icon>
           </div>          
        </div>
     </div>

@@ -20,4 +20,9 @@ class AuthController extends Controller
     	else
     		return redirect('login');
     }
+
+    function logout(){
+        Auth::logout();     
+        return redirect('login');
+    }
 }

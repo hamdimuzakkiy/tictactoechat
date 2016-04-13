@@ -39,6 +39,17 @@ gameControllers.controller('boardCtrl', ['$scope', '$routeParams', '$http', '$lo
 				gameChannel.bind('message', function(data){					
 					updateAll(data, $scope);
 				});
+				gameChannel.bind('winner', function(data){				
+					console.log(data);
+					var content = {
+						title 		: 'Game End !!!',
+						textContent : data+" Winner",
+						ok 			: 'Ok',
+					};
+					dialogConfirm($mdDialog, '', content, function(){
+						$window.location.href = '#/';
+					});
+				});
 			}
 		});
 		$scope.choosing = function (choice){
@@ -89,7 +100,7 @@ function transleteMovement(game){
 }
 
 function xoro(player, creator){	
-	if (creator == player)
-		return 'X';
-	return 'O';
+	if (creator == player)		
+		return 'ic_clear_white_48px.svg';	
+	return 'ic_panorama_fish_eye_white_48px.svg';
 }

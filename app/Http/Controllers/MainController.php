@@ -31,8 +31,10 @@ class MainController extends LogicController
 
     function joinRoom(Request $request){
         $status =  $this->joinCache($request->id, $request->password);
-        Pusher::trigger('room', 'room', $this->getCaches());
-        $this->broadcastGame();
+        if ($status){
+            Pusher::trigger('room', 'room', $this->getCaches());
+            $this->broadcastGame();
+        }
         return $status;
     }
 
@@ -75,8 +77,23 @@ class MainController extends LogicController
     }
 
     function turn(Request $request){
-        if ($this->updateMovements($request->tile))
-            $this->broadcastGame();        
+        if ($this->updateMovements($request->tile)){            
+            $this->broadcastGame();
+            if ($this->checkGame() != ''){
+                $this->gameWiner($this->checkGame());
+                $this->deleteUserCache();
+            }            
+            $this->broadcastRoom();
+        }                        
+    }
+
+    function broadcastRoom(){
+        Pusher::trigger('room', 'room', $this->getCaches());
+    }
+
+    function gameWiner($winner){
+        Pusher::trigger($this->getCaches()[$this->getCache()['gameId']]['subscribe'],'winner'
+            , $winner); 
     }
 
     function broadcastGame(){
@@ -85,7 +102,7 @@ class MainController extends LogicController
     }
 
     function test(){
-        Pusher::trigger($this->getCaches()[$this->getCache()['gameId']]['subscribe'],'message'
-            , $this->getCaches()[$this->getCache()['gameId']]);        
+        //$this->deleteUserCache();
+        return $this->getCache();
     }
 }
